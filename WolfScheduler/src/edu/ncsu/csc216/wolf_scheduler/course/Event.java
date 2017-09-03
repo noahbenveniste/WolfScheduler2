@@ -70,6 +70,31 @@ public class Event extends Activity{
 	}
 	
 	/**
+	 * Sets the meeting days for an Event
+	 * @param meetingDays the meetingDays to set
+	 * @throws IllegalArgumentException if the input is null or an empty string, if the 
+	 * input has characters other than u,m,t,w,h,f,s
+	 */
+	@Override
+	public void setMeetingDays(String meetingDays) {
+		//Check that the input isn't null or an empty string
+		if (meetingDays == null || meetingDays.equals("")) {
+			throw new IllegalArgumentException();
+		}
+		
+		//Check for invalid characters
+		for (int i = 0; i < meetingDays.length(); i++) {
+			if (meetingDays.charAt(i) != 'U' && meetingDays.charAt(i) != 'M' && meetingDays.charAt(i) != 'T' && 
+					meetingDays.charAt(i) != 'W' && meetingDays.charAt(i) != 'H' && 
+					meetingDays.charAt(i) != 'F' && meetingDays.charAt(i) != 'S') {
+				throw new IllegalArgumentException();
+			}
+		}
+		
+		super.setMeetingDays(meetingDays);
+	}
+	
+	/**
 	 * Creates and returns a string array containing two empty strings for fields that Event does not
 	 * have, as well as the Event title and meetingString
 	 * @return the short string array

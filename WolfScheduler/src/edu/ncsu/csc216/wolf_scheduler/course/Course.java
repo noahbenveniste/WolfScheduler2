@@ -157,6 +157,37 @@ public class Course extends Activity {
 	}
 	
 	/**
+	 * Sets the meeting days for a Course
+	 * @param meetingDays the meetingDays to set
+	 * @throws IllegalArgumentException if the input is null or an empty string, if the 
+	 * input has characters other than m,t,w,h,f,a, if an input contains the character "A" 
+	 * with any other characters
+	 */
+	@Override
+	public void setMeetingDays(String meetingDays) {
+		//Check that the input isn't null or an empty string
+		if (meetingDays == null || meetingDays.equals("")) {
+			throw new IllegalArgumentException();
+		}
+		
+		//Check for invalid characters
+		for (int i = 0; i < meetingDays.length(); i++) {
+			if (meetingDays.charAt(i) != 'M' && meetingDays.charAt(i) != 'T' && 
+					meetingDays.charAt(i) != 'W' && meetingDays.charAt(i) != 'H' && 
+					meetingDays.charAt(i) != 'F' && meetingDays.charAt(i) != 'A') {
+				throw new IllegalArgumentException();
+			}
+			//Check that if the string is greater than 1 char, it doesn't
+			//contain 'A'
+			if (meetingDays.charAt(i) == 'A' && meetingDays.length() > 1) {
+				throw new IllegalArgumentException();
+			}
+		}
+		
+		super.setMeetingDays(meetingDays);
+	}
+	
+	/**
 	 * Creates and returns a string array containing the course name, section, title and meetingString
 	 * @return the short string array
 	 */
