@@ -174,6 +174,11 @@ public abstract class Activity {
 	 * 
 	 */
 	public abstract String[] getLongDisplayArray();
+	
+	/**
+	 * 
+	 */
+	public abstract boolean isDuplicate(Activity activity);
 
 	
 	/** Overridden hashCode() and equals() */

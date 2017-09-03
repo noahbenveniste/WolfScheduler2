@@ -188,6 +188,29 @@ public class Course extends Activity {
 	}
 	
 	/**
+	 * 
+	 */
+	@Override
+	public boolean isDuplicate(Activity activity) {
+		//Check that the input is of type Course
+		if (activity instanceof Course) {
+			//Cast the input to a Course
+			Course course = (Course)activity;
+			//Check that the courses being compared do not have the same name
+			if (this.getName().equals(course.getName())) {
+				//Return true if they do have the same name
+				return true;
+			} else {
+				//Return false if they don't have the same name
+				return false;
+			}
+		} else {
+			//Return false if the Activity is not a Course
+			return false;
+		}
+	}
+	
+	/**
 	 * Creates and returns a string array containing the course name, section, title and meetingString
 	 * @return the short string array
 	 */

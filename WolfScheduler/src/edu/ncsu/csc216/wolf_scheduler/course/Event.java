@@ -92,6 +92,29 @@ public class Event extends Activity{
 	}
 	
 	/**
+	 * 
+	 */
+	@Override
+	public boolean isDuplicate(Activity activity) {
+		//Check that the input is an Event
+		if (activity instanceof Event) {
+			//Cast the activity to an Event
+			Event event = (Event)activity;
+			//Check that the events being compared do not have the same title
+			if (this.getTitle().equals(event.getTitle())) {
+				//Return true if they do have the same title
+				return true;
+			} else {
+				//Return false if they don't have the same title
+				return false;
+			}
+		} else {
+			//Return false if the Activity is not an Event
+			return false;
+		}
+	}
+	
+	/**
 	 * Creates and returns a string array containing two empty strings for fields that Event does not
 	 * have, as well as the Event title and meetingString
 	 * @return the short string array

@@ -4,7 +4,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import edu.ncsu.csc216.wolf_scheduler.course.Activity;
 import edu.ncsu.csc216.wolf_scheduler.course.Course;
+import edu.ncsu.csc216.wolf_scheduler.course.Event;
 import edu.ncsu.csc216.wolf_scheduler.io.ActivityRecordIO;
 import edu.ncsu.csc216.wolf_scheduler.io.CourseRecordIO;
 
@@ -21,7 +23,7 @@ public class WolfScheduler {
 	/** Catalog of courses to be chosen from */
 	private ArrayList<Course> courseCatalog;
 	/** The student's schedule */
-	private ArrayList<Course> schedule;
+	private ArrayList<Activity> schedule;
 	/** The title of the schedule */
 	private String title;
 	
@@ -42,7 +44,7 @@ public class WolfScheduler {
 		this.courseCatalog = c;
 		
 		//Create the schedule
-		ArrayList<Course> s = new ArrayList<Course>();
+		ArrayList<Activity> s = new ArrayList<Activity>();
 		this.schedule = s;
 		
 		//Set the default schedule name
@@ -98,7 +100,7 @@ public class WolfScheduler {
 		//Next, check that a course with the same name does not already exist in the schedule
 		for (int i = 0; i < this.schedule.size(); i++) {
 			//Check if the currently indexed course in the schedule has the same name as the input
-			if (this.schedule.get(i).getName().equals(name)) {
+			if (this.schedule.get(i).isDuplicate(this.getCourseFromCatalog(name, section))) {
 				//If true, throw an exception
 				throw new IllegalArgumentException("You are already enrolled in " + name);
 			}
@@ -114,27 +116,40 @@ public class WolfScheduler {
 	}
 	
 	/**
-	 * Checks if a given course can be removed from the student's schedule and then removes
-	 * it if allowed
-	 * @param name the name of the course
-	 * @param section the section for the course
+	 * 
+	 */
+	public void addEvent(String title, String meetingDays, int startTime, int endTime, int weeklyRepeat, String eventDetails) {
+		//Try to create the event
+		Event newEvent = new Event(title, meetingDays, startTime, endTime, weeklyRepeat, eventDetails);
+		//Check that an event with the same title does not already exist
+		for (int i = 0; i < this.schedule.size(); i++) {
+			//Check if the currently indexed activity in the schedule is an event that has
+			//the same title
+			if (this.schedule.get(i).isDuplicate(newEvent)) {
+				//If true, throw an exception
+				throw new IllegalArgumentException("You have already created an event called " + newEvent.getTitle());
+			}
+		}
+		//Add the event if it does not already exist
+		this.schedule.add(this.schedule.size(), newEvent);
+	}
+	
+	/**
+	 * Checks if an activity at a given index can be removed from the student's schedule and
+	 * then removes it if allowed
+	 * @param idx The index of the activity to be removed from the schedule
 	 * @return true if the course can be removed (i.e. it is in the schedule), false if it
 	 * cannot be removed (it is not in the schedule)
 	 */
-	public boolean removeCourse(String name, String section) {
-		for (int i = 0; i < this.schedule.size(); i++) {
-			//Check if the currently indexed course in the schedule has the same name and
-			//section as the input name and section
-			if (this.schedule.get(i).getName().equals(name) && 
-					this.schedule.get(i).getSection().equals(section)) {
-				//If true, remove the course and then return true
-				this.schedule.remove(this.getCourseFromCatalog(name, section));
-				return true;
-			}
+	public boolean removeActivity(int idx) {
+		//Checks to see if the passed index is in bounds for the array. If it is, remove the
+		//element at that index and return true. If not, return false.
+		if (this.schedule.size() > idx) {
+			this.schedule.remove(idx);
+			return true;
+		} else {
+			return false;
 		}
-		//If the loop executes without returning true, the course does not exist in the schedule, 
-		//so return false
-		return false;
 	}
 	
 	/**
@@ -143,7 +158,7 @@ public class WolfScheduler {
 	 */
 	public void resetSchedule() {
 		//Create a new empty array list of courses
-		ArrayList<Course> newEmptySchedule = new ArrayList<Course>();
+		ArrayList<Activity> newEmptySchedule = new ArrayList<Activity>();
 		//Set the schedule field of the object to the newly created empty schedule
 		this.schedule = newEmptySchedule;
 	}
@@ -161,8 +176,8 @@ public class WolfScheduler {
 		if (numRow == 0) {
 			return new String[0][0];
 		}
-		//Three columns: name, section, title
-		int numCol = 3;
+		//Four columns: name, section, title, meetingString
+		int numCol = 4;
 		//Create the string array with the one row per course in the catalog
 		String[][] catStr = new String[numRow][numCol];
 		//Index through the course catalog, finding the relevant data for each course
@@ -174,6 +189,8 @@ public class WolfScheduler {
 			catStr[i][1] = this.courseCatalog.get(i).getSection();
 			//Add the course title
 			catStr[i][2] = this.courseCatalog.get(i).getTitle();
+			//Add the meetingString
+			catStr[i][3] = this.courseCatalog.get(i).getMeetingString();
 			//Next iteration of loop adds data for next course in the catalog in the
 			//next row of the array
 		}
@@ -186,26 +203,22 @@ public class WolfScheduler {
 	 * @return a 2D string array of the schedule if there are courses in the schedule,
 	 * or an empty string array otherwise
 	 */
-	public String[][] getScheduledCourses() {
-		//The number of rows is determined by the number of courses in the schedule
+	public String[][] getScheduledActivities() {
+		//The number of rows is determined by the number of activities in the schedule
 		int numRow = this.schedule.size();
-		//If there are no courses in the schedule, return an empty array
+		//If there are no activities in the schedule, return an empty array
 		if (numRow == 0) {
 			return new String[0][0];
 		}
-		//Three columns: name, section, title
-		int numCol = 3;
-		//Create the string array with the one row per course in the schedule
+		//Three columns: name, section, title, meetingString
+		int numCol = 4;
+		//Create the string array with the one row per activity in the schedule
 		String[][] schedStr = new String[numRow][numCol];
 		//Index through the schedule, finding the relevant data for each course
 		//and then add it to the array in the proper index
 		for (int i = 0; i < numRow; i++) {
-			//Add the course name
-			schedStr[i][0] = this.schedule.get(i).getName();
-			//Add the course section
-			schedStr[i][1] = this.schedule.get(i).getSection();
-			//Add the course title
-			schedStr[i][2] = this.schedule.get(i).getTitle();
+			//Get the activity information for short display
+			schedStr[i] = this.schedule.get(i).getShortDisplayArray();
 			//Next iteration of loop adds data for next course in the catalog in the
 			//next row of the array
 		}
@@ -218,33 +231,22 @@ public class WolfScheduler {
 	 * @return a 2D string array of the schedule if there are courses in the schedule,
 	 * or an empty string array otherwise
 	 */
-	public String[][] getFullScheduledCourses() {
+	public String[][] getFullScheduledActivities() {
 		//The number of rows is determined by the number of courses in the schedule
 		int numRow = this.schedule.size();
 		//If there are no courses in the schedule, return an empty array
 		if (numRow == 0) {
 			return new String[0][0];
 		}
-		//Six columns: name, section, title, credits, instructorId, meetingDays
-		int numCol = 6;
+		//Seven columns: name, section, title, credits, instructorId, meetingDays, eventDetails
+		int numCol = 7;
 		//Create the string array with the one row per course in the schedule
 		String[][] fullSchedStr = new String[numRow][numCol];
 		//Index through the schedule, finding the relevant data for each course
 		//and then add it to the array in the proper index
 		for (int i = 0; i < numRow; i++) {
-			//Add the course name
-			fullSchedStr[i][0] = this.schedule.get(i).getName();
-			//Add the course section
-			fullSchedStr[i][1] = this.schedule.get(i).getSection();
-			//Add the course title
-			fullSchedStr[i][2] = this.schedule.get(i).getTitle();
-			//Add the credits (make sure to concatenate the returned int to a string
-			//before attempting to add it to the array)
-			fullSchedStr[i][3] = "" + this.schedule.get(i).getCredits();
-			//Add the instructorId
-			fullSchedStr[i][4] = this.schedule.get(i).getInstructorId();
-			//Add the meetingDays
-			fullSchedStr[i][5] = this.schedule.get(i).getMeetingString();
+			//Get the activity information for long display
+			fullSchedStr[i] = this.schedule.get(i).getLongDisplayArray();
 			//Next iteration of loop adds data for next course in the catalog in the
 			//next row of the array
 		}
@@ -279,7 +281,7 @@ public class WolfScheduler {
 	 */
 	public void exportSchedule(String fileName) {
 		try {
-			ActivityRecordIO.writeCourseRecords(fileName, this.schedule);
+			ActivityRecordIO.writeActivityRecords(fileName, this.schedule);
 		} catch (IOException e) {
 			throw new IllegalArgumentException("The file cannot be saved.");
 		}
