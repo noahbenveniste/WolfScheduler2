@@ -16,14 +16,21 @@ public abstract class Activity {
 	/** Activity's ending time */
 	private int endTime;
 
+	/**
+	 * Constructor for an Activity object
+	 * @param title Title of the Activity
+	 * @param meetingDays First letter of all days the Activity takes place
+	 * @param startTime Start time of the Activity
+	 * @param endTime End time of the Activity
+	 */
 	public Activity(String title, String meetingDays, int startTime, int endTime) {
 		setTitle(title);
 		setMeetingDays(meetingDays);
-		setCourseTime(startTime, endTime);
+		setActivityTime(startTime, endTime);
 	}
 
 	/**
-	 * Gets the course's title.
+	 * Gets the Activity's title.
 	 * @return the title
 	 */
 	public String getTitle() {
@@ -31,7 +38,7 @@ public abstract class Activity {
 	}
 
 	/**
-	 * Sets the course's title.
+	 * Sets the Activity's title.
 	 * @param title the title to set
 	 * @throws IllegalArgumentException if the title is null or an empty string
 	 */
@@ -82,14 +89,14 @@ public abstract class Activity {
 	}
 
 	/**
-	 * Sets the startTime and the endTime for the course
-	 * @param startTime the starting time of the course
-	 * @param endTime the ending time of the course
+	 * Sets the startTime and the endTime for the Activity
+	 * @param startTime the starting time of the Activity
+	 * @param endTime the ending time of the Activity
 	 * @throws IllegalArgumentException if meetingDays is A and the start time and end time are
 	 * not both 0, if the start time and end time are not between 0 and 2359, if the minutes are
 	 * not between 0 and 59, or if the start time is greater than the end time
 	 */
-	public void setCourseTime(int startTime, int endTime) {
+	public void setActivityTime(int startTime, int endTime) {
 		//Check that if meetingDays is "A", startTime and endTime are both zero
 		if (this.getMeetingDays().equals("A") && (startTime != 0 && endTime != 0)) {
 			throw new IllegalArgumentException();
@@ -196,7 +203,7 @@ public abstract class Activity {
 	
 	/**
 	 * Generates a hashCode for Course using all fields.
-	 * @return hashCode for Course
+	 * @return hashCode for Activity
 	 */
 	@Override
 	public int hashCode() {
