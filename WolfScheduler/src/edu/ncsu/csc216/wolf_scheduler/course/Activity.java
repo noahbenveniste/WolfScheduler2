@@ -166,17 +166,23 @@ public abstract class Activity {
 	}
 	
 	/**
-	 * 
+	 * Used for creating a short form string array with information about an Activity
+	 * @return The short string array containing the Activity info
 	 */
 	public abstract String[] getShortDisplayArray();
 	
 	/**
-	 * 
+	 * Used for creating a long form string array with information about an Activity
+	 * @return The long string array containing the Activity info
 	 */
 	public abstract String[] getLongDisplayArray();
 	
 	/**
-	 * 
+	 * Used for determining whether or not an Activity is a duplicate of another Activity.
+	 * The criteria for whether an Event or a Course is a duplicate is described in the
+	 * different implementations of the method in the two subclasses
+	 * @param activity The activity to compare
+	 * @return true if the Activities are duplicates, false otherwise
 	 */
 	public abstract boolean isDuplicate(Activity activity);
 

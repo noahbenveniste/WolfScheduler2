@@ -8,14 +8,15 @@ import java.util.ArrayList;
 import edu.ncsu.csc216.wolf_scheduler.course.Activity;
 
 /**
+ * Class that handles the writing of activities to an output file
  * @author Noah Benveniste
  */
 public class ActivityRecordIO {
 
 	/**
 	 * Writes the given list of Courses to an output file
-	 * @param fileName the name of the file to be written to
-	 * @param courses an array list of courses to be written to the file
+	 * @param fileName The name of the file to be written to
+	 * @param activities An array list of Activities to be written to the file
 	 * @throws IOException if the file cannot be saved
 	 */
 	public static void writeActivityRecords(String fileName, ArrayList<Activity> activities) throws IOException {

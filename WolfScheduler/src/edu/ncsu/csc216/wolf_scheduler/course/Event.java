@@ -4,7 +4,7 @@ package edu.ncsu.csc216.wolf_scheduler.course;
  * Object class that represents an event
  * @author Noah Benveniste
  */
-public class Event extends Activity{
+public class Event extends Activity {
 
 	/** The number of weeks the event repeats */
 	private int weeklyRepeat;
@@ -92,7 +92,12 @@ public class Event extends Activity{
 	}
 	
 	/**
-	 * 
+	 * Checks if two Events are duplicates of one another. An Event is a duplicate of another
+	 * if it has the same title as the other.
+	 * @param activity The Activity to compare
+	 * @return true if the input Activity is an Event and it has the same title as the Event being
+	 * compared, false if the input Activity is not an Event or it is an Event and it does not
+	 * have the same title as the Event being compared
 	 */
 	@Override
 	public boolean isDuplicate(Activity activity) {
@@ -101,13 +106,7 @@ public class Event extends Activity{
 			//Cast the activity to an Event
 			Event event = (Event)activity;
 			//Check that the events being compared do not have the same title
-			if (this.getTitle().equals(event.getTitle())) {
-				//Return true if they do have the same title
-				return true;
-			} else {
-				//Return false if they don't have the same title
-				return false;
-			}
+			return this.getTitle().equals(event.getTitle());
 		} else {
 			//Return false if the Activity is not an Event
 			return false;

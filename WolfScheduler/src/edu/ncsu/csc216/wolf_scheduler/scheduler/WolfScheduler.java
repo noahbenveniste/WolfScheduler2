@@ -116,7 +116,14 @@ public class WolfScheduler {
 	}
 	
 	/**
-	 * 
+	 * Adds a user-defined event to the schedule if an event with the same title does not already exist
+	 * @param title The title of the event
+	 * @param meetingDays The days the event takes place
+	 * @param startTime The start time of the event
+	 * @param endTime The end time of the event
+	 * @param weeklyRepeat The number of weeks the event repeats for
+	 * @param eventDetails Details describing the event
+	 * @throws IllegalArgumentException if the user attempts to add an event with the same title as another event already in the schedule
 	 */
 	public void addEvent(String title, String meetingDays, int startTime, int endTime, int weeklyRepeat, String eventDetails) {
 		//Try to create the event

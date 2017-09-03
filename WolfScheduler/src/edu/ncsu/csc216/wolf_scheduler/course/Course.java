@@ -188,7 +188,12 @@ public class Course extends Activity {
 	}
 	
 	/**
-	 * 
+	 * Checks if two courses are duplicates. A course is a duplicate of another if
+	 * it has the same name.
+	 * @param activity The activity to be compared
+	 * @return true if the input activity is a course and has the same name as the 
+	 * course being compared, false if the input is not a course or it is a course 
+	 * and does not have the same name as the course being compared
 	 */
 	@Override
 	public boolean isDuplicate(Activity activity) {
@@ -197,13 +202,7 @@ public class Course extends Activity {
 			//Cast the input to a Course
 			Course course = (Course)activity;
 			//Check that the courses being compared do not have the same name
-			if (this.getName().equals(course.getName())) {
-				//Return true if they do have the same name
-				return true;
-			} else {
-				//Return false if they don't have the same name
-				return false;
-			}
+			return this.getName().equals(course.getName());
 		} else {
 			//Return false if the Activity is not a Course
 			return false;
