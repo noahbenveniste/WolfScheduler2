@@ -172,7 +172,7 @@ public class WolfScheduler {
 	
 	/**
 	 * Creates and returns a 2D string array representation of the course catalog containing
-	 * information about the courses' name, section and title
+	 * information about the courses' name, section, title and meeting info
 	 * @return a 2D string array of the course catalog if there are courses in the catalog,
 	 * or an empty string array otherwise
 	 */
@@ -206,8 +206,8 @@ public class WolfScheduler {
 
 	/**
 	 * Creates and returns a 2D string array representation of the schedule containing
-	 * information about the courses' name, section and title
-	 * @return a 2D string array of the schedule if there are courses in the schedule,
+	 * information about the activities it contains
+	 * @return a 2D string array of the schedule if there are activities in the schedule,
 	 * or an empty string array otherwise
 	 */
 	public String[][] getScheduledActivities() {
